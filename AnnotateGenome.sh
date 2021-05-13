@@ -7,10 +7,9 @@
 
 # First, perform annotation liftover using LiftOff from closely related species
 
-# Download RefSeq Alpine marmot genome and output to a .fa file (recognized by other tools whereas .fna extensions sometimes are not)
-wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/458/135/GCF_001458135.1_marMar2.1/GCF_001458135.1_marMar2.1_genomic.fna.gz \
- -O GCF_001458135.1_marMar2.1_genomic.fa.gz
- gunzip GCF_001458135.1_marMar2.1_genomic.fa.gz
+# Download RefSeq Alpine marmot genome (marMar2.1)
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/458/135/GCF_001458135.1_marMar2.1/GCF_001458135.1_marMar2.1_genomic.fna.gz
+ gunzip GCF_001458135.1_marMar2.1_genomic.fna.gz
  # Download the corresponding annotation file
  wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/458/135/GCF_001458135.1_marMar2.1/GCF_001458135.1_marMar2.1_genomic.gff.gz
  gunzip GCF_001458135.1_marMar2.1_genomic.gff.gz
@@ -26,8 +25,44 @@ wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/458/135/GCF_001458135.1_ma
 # -copies: look for extra gene copies in the target genome
 liftoff \
  WCK01_AAH20201022_F8-SCF.fasta \
- GCF_001458135.1_marMar2.1_genomic.fa \
+ GCF_001458135.1_marMar2.1_genomic.fna \
  -g GCF_001458135.1_marMar2.1_genomic.gff \
- -o from_marMar_copies.gff -p 15 \
- -f liftoffFeatures \
+ -o from_marMar_copies_scf.gff -p 15 \
+ -f liftoffFeatures.txt \
+ -m /path/to/minimap2 -flank 0.5 -copies
+
+# Repeat the annotation liftover with the yellow-bellied marmot RefSeq genome annotation (GSC_YBM_2.0)
+
+# Download genome
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/676/075/GCF_003676075.2_GSC_YBM_2.0/GCF_003676075.2_GSC_YBM_2.0_genomic.fna.gz
+gunzip GCF_003676075.2_GSC_YBM_2.0_genomic.fna.gz
+# Download the annotation file
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/676/075/GCF_003676075.2_GSC_YBM_2.0/GCF_003676075.2_GSC_YBM_2.0_genomic.gff.gz
+gunzip GCF_003676075.2_GSC_YBM_2.0_genomic.gff.gz
+
+# Run LiftOff using the same parameters
+liftoff \
+ WCK01_AAH20201022_F8-SCF.fasta \
+ GCF_003676075.2_GSC_YBM_2.0_genomic.fna \
+ -g GCF_003676075.2_GSC_YBM_2.0_genomic.gff \
+ -o from_gsc_ybm_scf.gff -p 15 \
+ -f liftoffFeatures.txt \
+ -m /path/to/minimap2 -flank 0.5 -copies
+ 
+ # Repeat this again with the 13-lined ground squirrel Refseq genome annotation (SpeTri2.0)
+ 
+ # Download genome
+ wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/236/235/GCF_000236235.1_SpeTri2.0/GCF_000236235.1_SpeTri2.0_genomic.fna.gz
+ gunzip GCF_000236235.1_SpeTri2.0_genomic.fna.gz
+ # Download annotation
+ wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/236/235/GCF_000236235.1_SpeTri2.0/GCF_000236235.1_SpeTri2.0_genomic.gff.gz
+ gunzip GCF_000236235.1_SpeTri2.0_genomic.gff.gz
+ 
+ # Run LiftOff using the same parameters
+liftoff \
+ WCK01_AAH20201022_F8-SCF.fasta \
+ GCF_000236235.1_SpeTri2.0_genomic.fna \
+ -g GCF_000236235.1_SpeTri2.0_genomic.gff \
+ -o from_SpeTri_scf.gff -p 15 \
+ -f liftoffFeatures.txt \
  -m /path/to/minimap2 -flank 0.5 -copies
