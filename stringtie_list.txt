@@ -1,0 +1,7 @@
+stringtie_SRR10172922_scf.gtf	S22	True		False
+stringtie_SRR10172923_scf.gtf	S23	True		False
+stringtie_SRR10172924_scf.gtf	S24	True		False
+stringtie_SRR10172925_scf.gtf	S25	True		False
+stringtie_SRR10172926_scf.gtf	S26	True		False
+stringtie_SRR10172930_scf.gtf	S30	True		False
+stringtie_SRR10172931_scf.gtf	S31	True		False
