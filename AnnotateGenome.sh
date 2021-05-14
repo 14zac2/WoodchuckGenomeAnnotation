@@ -193,3 +193,33 @@ samtools merge -@ 48 alioto_scf_merged.sorted.bam \
  SRR10172930_scf.sorted.bam \
  SRR10172931_scf.sorted.bam
 
+# Run Portcullis on the combined BAM to validate splice junctions
+# Using portcullis v1.2.0
+# The full pipeline includes prep, junc, filt and outputs validated junctions
+# -t is number of threads
+portcullis full -t 1 WCK01_AAH20201022_F8-SCF.fasta alioto_scf_merged.sorted.bam
+# Use the filt output portcullis.pass.junctions.bed for Mikado
+
+# Filter the stringtie annotation with Mikado
+# Using Mikado v2.0rc2 and Python v3.6.10
+# conf.yaml is a separate configuration file used in the healthy woodchuck Github repo
+# Mikado prepare collects the assemblies, removes redundant transcripts, and extracts their sequences
+# -p is the number of threads
+# --start-method indicates how to begin the multiprocessing
+# --json-conf points to the configuration file
+mikado prepare -p 48 --start-method spawn --json-conf mik_string_conf.yaml
+
+# Now BLAST+ and Transdecoder must be run on the output of mikado prepare
+# The output was a fasta file of the non-redundant transcripts
+
+# Using Transdecoder v5.5.0; identifies likely coding sequences based on open reading frames (ORFs)
+# -t is the transcript fasta file
+# -m is the minimum protein length of 30 amino acids
+TransDecoder.LongOrfs -t mikado_prepared.fasta -m 30
+# --retain_long_orfs_length retains ORFs equal to or longer than 30 nucleotides
+TransDecoder.Predict -t mikado_prepared.fasta --retain_long_orfs_length 30
+# Outputs valid ORFs in a bed file, in this case: mikado_prepared.fasta.transdecoder.bed
+
+# Use blast+ v2.11.0 to look for sequence homology in SwissProt database
+# First download SwissProt database; this was accessed on Oct 4th, 2020
+wget ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
