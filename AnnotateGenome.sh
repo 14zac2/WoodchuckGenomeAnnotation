@@ -223,3 +223,52 @@ TransDecoder.Predict -t mikado_prepared.fasta --retain_long_orfs_length 30
 # Use blast+ v2.11.0 to look for sequence homology in SwissProt database
 # First download SwissProt database; this was accessed on Oct 4th, 2020
 wget ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
+# Index the protein database so that it can be used for blast
+# -dbtype indicates that this is a protein database
+makeblastdb -in uniprot_sprot.fasta -dbtype prot -out uniprot_sprot
+# Blast the transcript sequences against the SwissProt database
+# blastx specifies blasting nucleotides against amino acids
+# -max_target_seqs: keep a maximum of 5 hits
+# -query is the transcript file from Mikado that will be blasted against the protein database
+# -outfmt specifies the format required by the next step of Mikado
+# -db is the SwissProt database
+# -evalue is a minimum measure of significance to consider a protein sequence in the SwissProt database a hit against the query
+blastx -max_target_seqs 5 -num_threads 48 -query mikado_prepared.fasta \
+ -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore ppos btop" \
+ -db uniprot_sprot -evalue 0.000001 -out blast_results.tsv
+
+# The outputs of blast+, Transdecoder, and Portcullis are used for the next step of Mikado
+# This is also when different scores from the different annotation sets listed in stringtie_list.txt would be taken into account,
+# but all annotations are from stringtie and given the same score; stringtie_list.txt is in the Github repo
+# -p is the number of threads and --start-method indicates how to begin the multi-processing
+# --orfs points to the output from Transdecoder
+# --transcripts points to the output from Mikado prepare
+# --tsv points to the results from blast+
+# --json-conf points to the Mikado configuration file that was used for Mikado prepare and is in the Github repo
+# --genome_fai points to the index file of the reference genome
+# --log specifies the name of the output log file
+# --blast-targets points towards the SwissProt fasta file that was used for the blast+ homology search
+# --max-target-seqs 5 indicates the maximum target sequences allowed for the homology search
+# --junctions points to the Portcullis output
+mikado serialise -p 48 --start-method spawn \
+ --orfs mikado_prepared.fasta.transdecoder.bed \
+ --transcripts mikado_prepared.fasta --tsv blast_results.tsv \
+ --json-conf mik_string_conf.yaml --genome_fai WCK01_AAH20201022_F8-SCF.fasta.fai \
+ --log mikado_serialise.log --blast-targets uniprot_sprot.fasta --max-target-seqs 5 \
+ --junctions portcullis.pass.junctions.bed
+# The important output is the .db file. It needs to be deleted if mikado serialise fails and needs to be run again.
+
+# The final step of Mikado uses the information from the Mikado serialise .db file to "pick" the final annotation set
+# --json-conf points towards the Mikado configuration file
+# -db points towards the output from Mikado serialise
+# --start-method and -p specify the multi-processing requirements
+# --loci-out specifies the name of the GFF output file
+# --log the output log file
+# --scoring points towards the scoring file used to prioritise the transcripts in the final annotation;
+# different species typically have different scoring files, as optimal exon lengths, numbers, etc. vary across species
+# --mode indicates how transcripts should be split in the case of multiple blast hits or ORFs in a single transcript;
+# lenient indicates that the transcript should be split if a transcript has multiple ORFs with different blast hits,
+# or when either of the ORFs lacks a blast hit (but not both)
+mikado pick --json-conf mik_string_conf.yaml -db mikado.db --start-method spawn -p 48 \
+ --loci-out mikado_stringtie_scf_lenient.gff --log mikado_pick_stringtie_scf_lenient.log mikado_prepared.gtf \
+ --scoring mammalian_strict_rna.yaml --mode lenient
