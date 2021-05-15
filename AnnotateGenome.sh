@@ -272,3 +272,30 @@ mikado serialise -p 48 --start-method spawn \
 mikado pick --json-conf mik_string_conf.yaml -db mikado.db --start-method spawn -p 48 \
  --loci-out mikado_stringtie_scf_lenient.gff --log mikado_pick_stringtie_scf_lenient.log mikado_prepared.gtf \
  --scoring mammalian_strict_rna.yaml --mode lenient
+ 
+# Now use the LiftOff annotations, the filtered stringtie annotations, and the Ovaltine annotation as input for a second round of Mikado
+# conf.yaml is the new Mikado configuration file for this round of Mikado, located in the Github repo
+mikado prepare -p 48 --start-method spawn --json-conf conf.yaml
+# Creates the transcript fasta output from the various input assemblies listed in conf.yaml
+# Now run both blastx and Transdecoder, but not Portcullis because none of the inputs are raw transcript assemblies
+# This creates the same intermediate files as before
+TransDecoder.LongOrfs -t mikado_prepared.fasta -m 30
+TransDecoder.Predict -t mikado_prepared.fasta --retain_long_orfs_length 30
+blastx -max_target_seqs 5 -num_threads 48 -query mikado_prepared.fasta \
+ -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore ppos btop" \
+ -db uniprot_sprot -evalue 0.000001 -out blast_results.tsv
+# Now use the output of these tools and the different annotation set scores (in list.txt) for Mikado serialise
+# list.txt is available in the Github repo
+mikado serialise -p 48 --start-method spawn \
+ --orfs mikado_prepared.fasta.transdecoder.bed \
+ --transcripts mikado_prepared.fasta --tsv blast_results.tsv \
+ --json-conf conf.yaml --genome_fai WCK01_AAH20201022_F8-SCF.fasta.fai \
+ --log mikado_serialise.log --blast-targets uniprot_sprot.fasta --max-target-seqs 5
+ # Pick the final annotation set
+ # --mode is changed to stringent which means that transcripts are only split if two consecutive ORFs have both blast hits
+ # and none of those hits is against the same target.
+ # marmota_moreSplice.yaml is the new scoring file to use to pick the transcripts
+ mikado pick --json-conf conf.yaml -db mikado.db --start-method spawn -p 48 --mode stringent \
+ --loci-out mikado_final_SCF.gff --log mikado_ASC_3.log mikado_prepared.gtf \
+ --scoring marmota_moreSplice.yaml
+ # This generates the final annotation
