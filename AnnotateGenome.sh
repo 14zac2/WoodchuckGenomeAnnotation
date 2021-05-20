@@ -20,7 +20,6 @@ wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/458/135/GCF_001458135.1_ma
 # -g is the Alpine marmot annotation file to liftover
 # -o is the name of the output annotation
 # -p is number of threads
-# -f are the feature types to liftover; includes gene, mRNA, exon, CDS, and lnc_RNA
 # -flank: amount of flanking sequence to align as a fraction [0.0-1.0] of gene length. This can improve gene alignment where gene structure differs between target and reference
 # -copies: look for extra gene copies in the target genome
 liftoff \
@@ -28,7 +27,6 @@ liftoff \
  GCF_001458135.1_marMar2.1_genomic.fna \
  -g GCF_001458135.1_marMar2.1_genomic.gff \
  -o from_marMar_copies_scf.gff -p 15 \
- -f liftoffFeatures.txt \
  -m /path/to/minimap2 -flank 0.5 -copies
 
 # Repeat the annotation liftover with the yellow-bellied marmot RefSeq genome annotation (GSC_YBM_2.0)
@@ -46,7 +44,6 @@ liftoff \
  GCF_003676075.2_GSC_YBM_2.0_genomic.fna \
  -g GCF_003676075.2_GSC_YBM_2.0_genomic.gff \
  -o from_gsc_ybm_scf.gff -p 15 \
- -f liftoffFeatures.txt \
  -m /path/to/minimap2 -flank 0.5 -copies
  
  # Repeat this again with the 13-lined ground squirrel Refseq genome annotation (SpeTri2.0)
@@ -64,7 +61,6 @@ liftoff \
  GCF_000236235.1_SpeTri2.0_genomic.fna \
  -g GCF_000236235.1_SpeTri2.0_genomic.gff \
  -o from_SpeTri_scf.gff -p 15 \
- -f liftoffFeatures.txt \
  -m /path/to/minimap2 -flank 0.5 -copies
 
 # Second, use transcriptional evidence to locate transcribed genes
