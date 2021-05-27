@@ -234,8 +234,6 @@ blastx -max_target_seqs 5 -num_threads 48 -query mikado_prepared.fasta \
  -db uniprot_sprot -evalue 0.000001 -out blast_results.tsv
 
 # The outputs of blast+, Transdecoder, and Portcullis are used for the next step of Mikado
-# This is also when different scores from the different annotation sets listed in stringtie_list.txt would be taken into account,
-# but all annotations are from stringtie and given the same score; stringtie_list.txt is in the Github repo
 # -p is the number of threads and --start-method indicates how to begin the multi-processing
 # --orfs points to the output from Transdecoder
 # --transcripts points to the output from Mikado prepare
