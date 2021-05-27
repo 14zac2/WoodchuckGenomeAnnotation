@@ -1,0 +1,1 @@
+(GRCh38_latest_protein(GCF_000001635.27_GRCm39_protein(GCF_000236235.1_SpeTri2.0_protein(GCF_001458135.1_marMar2.1_protein,mikado_final_sc2_stringent_noMito_protein,GCF_003676075.2_GSC_YBM_2.0_protein))));
