@@ -100,6 +100,13 @@ sed -i -e 's/>\(.*\)gene=//' SpeTri2.0_cdsHeader.tsv
 sed -i -e 's/]\(.*\)protein_id=/\t/' SpeTri2.0_cdsHeader.tsv
 sed -i -e 's/].*//' SpeTri2.0_cdsHeader.tsv
 awk -F'\t' 'NF==2' SpeTri2.0_cdsHeader.tsv > temp.tsv && mv temp.tsv SpeTri2.0_cdsHeader.tsv
+
+# One last file that will be needed is a list of woodchuck gene names
+# This will be used to catalogue the orthologs from the other species
+# This can be done by extracting all gene-specific lines from the GFF file
+grep -P "\tgene\t" ../../mikado_round2/mikado_final_sc2_stringent_noMito.gff > mikado_geneList.txt
+# Then use sed to isolate the gene ID
+sed -i 's/.*ID=\(.*\);Name.*/\1/' mikado_geneList.txt
 # All of these files will now be read into an R script to convert the OrthoFinder peptide relationships to gene relationships
 
 # Another file that needs to be made is a "Homologene" style file for human-woodchuck
