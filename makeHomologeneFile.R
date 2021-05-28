@@ -1,10 +1,10 @@
-# Original script made Jan 15, 2021
-# Modified to suit SC2 May 28, 2021
+# This script creates a homologene file that is used to convert human gene pathway files (GMT files) into woodchuck GMT
 
 library(dplyr)
 library(tidyverse)
 
-setwd("~/Dropbox/Zoe/scf_version/make_gtf/orthofinder_sc2/protein_seqs/OrthoFinder/Results_May24/Orthologues/Orthologues_mikado_final_sc2_stringent_noMito_protein/")
+# Navigate to OrthoFinder result directory that contains woodchuck-human pairwise orthologs
+setwd("~/OrthoFinder/Results_May24/Orthologues/Orthologues_mikado_final_sc2_stringent_noMito_protein/")
 # Read in woodchuck and human pairwise orthologs from OrthoFinder
 orthoFinderPairs <- read.table("mikado_final_sc2_stringent_noMito_protein__v__GRCh38_latest_protein.tsv",
                                header = TRUE,
@@ -22,7 +22,7 @@ humanGroups$mikado_final_sc2_stringent_noMito_protein <- gsub("\\.[0-9]+$","",
 humanGroups <- dplyr::distinct(humanGroups)
 # Get entrez id for human genes
 # Read in conversion file
-humanConversion <- read.table("~/Dropbox/Zoe/scf_version/make_gtf/orthofinder_sc2/homologene/GRCh38.p13_cdsHeader_ID.tsv",
+humanConversion <- read.table("GRCh38.p13_cdsHeader_ID.tsv",
                               header = FALSE,
                               sep = "\t",
                               na.strings=c("", "NA"))
@@ -58,8 +58,8 @@ woodchuckDistinct <- dplyr::select(allDistinct, homoloGroup,
 # Remove duplicates
 humanDistinct <- dplyr::distinct(humanDistinct)
 woodchuckDistinct <- dplyr::distinct(woodchuckDistinct)
-# Read in woodchuck file with unique ortholog names
-woodchuckNames <- read.table("~/Dropbox/Zoe/scf_version/make_gtf/orthofinder_sc2/homologene/collectedOrthofinderPairings.tsv",
+# Read in woodchuck file with unique ortholog names (located in Github repo and created in FindOrthologLabels.sh)
+woodchuckNames <- read.table("collectedOrthofinderPairings.tsv",
                              sep = "\t",
                              header = TRUE)
 woodchuckNames <- dplyr::select(woodchuckNames, mikado_final_sc2_stringent_noMito_protein, uniqueHier)
@@ -73,8 +73,8 @@ colnames(humanDistinct) <- c("homoloGroup", "taxID", "geneID", "geneSymbol")
 colnames(woodchuckDistinct) <- c("homoloGroup", "taxID", "geneID", "geneSymbol")
 # Join by column names
 allFinal <- dplyr::bind_rows(humanDistinct, woodchuckDistinct)
-# Write table
-write.table(allFinal, file= "~/Dropbox/Zoe/scf_version/make_gtf/orthofinder_sc2/homologene/homologroupHumanWoodchuck.tsv",
+# Write the table that is the homologene file
+write.table(allFinal, file= "homologroupHumanWoodchuck.tsv",
             quote = FALSE,
             row.names = FALSE,
             sep = "\t")
