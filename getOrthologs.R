@@ -62,7 +62,7 @@ mousePairs <- dplyr::select(mousePairs,
 # Remove duplicates
 mousePairs <- dplyr::distinct(mousePairs)
 # Read in conversion file
-mouseConversion <- read.table("~/Dropbox/Zoe/scf_version/make_gtf/orthofinder_sc2/homologene/GRCm39_cdsHeader.tsv",
+mouseConversion <- read.table("GRCm39_cdsHeader.tsv",
                               header = FALSE,
                               sep = "\t")
 colnames(mouseConversion) <- c("mouseGene", "GCF_000001635.27_GRCm39_protein")
@@ -78,7 +78,7 @@ mousePairs <- mousePairs[!(is.na(mousePairs$mouseGene) | mousePairs$mouseGene=="
 mousePairs <- plyr::ddply(mousePairs, "mikado_final_sc2_stringent_noMito_protein", summarize,
                           mouseGene = paste(mouseGene, collapse = ";"))
 # 18,352 woodchuck genes have mouse orthologs
-write.table(mousePairs, file = "~/Dropbox/Zoe/scf_version/make_gtf/orthofinder_sc2/homologene/mousePairedOrthos.tsv",
+write.table(mousePairs, file = "mousePairedOrthos.tsv",
             quote = FALSE,
             sep = "\t",
             row.names = FALSE)
@@ -100,7 +100,7 @@ ybmarPairs <- dplyr::select(ybmarPairs,
 # Remove duplicates
 ybmarPairs <- dplyr::distinct(ybmarPairs)
 # Read in conversion file
-ybmarConversion <- read.table("~/Dropbox/Zoe/scf_version/make_gtf/orthofinder_sc2/homologene/GSC_YBM_2.0_cdsHeader.tsv",
+ybmarConversion <- read.table("GSC_YBM_2.0_cdsHeader.tsv",
                               header = FALSE,
                               sep = "\t")
 colnames(ybmarConversion) <- c("ybmarGene", "GCF_003676075.2_GSC_YBM_2.0_protein")
@@ -116,7 +116,7 @@ ybmarPairs <- ybmarPairs[!(is.na(ybmarPairs$ybmarGene) | ybmarPairs$ybmarGene=="
 ybmarPairs <- plyr::ddply(ybmarPairs, "mikado_final_sc2_stringent_noMito_protein", summarize,
                           ybmarGene = paste(ybmarGene, collapse = ";"))
 # 19,567 woodchuck genes have ybmar orthologs
-write.table(ybmarPairs, file = "~/Dropbox/Zoe/scf_version/make_gtf/orthofinder_sc2/homologene/ybmarPairedOrthos.tsv",
+write.table(ybmarPairs, file = "ybmarPairedOrthos.tsv",
             quote = FALSE,
             sep = "\t",
             row.names = FALSE)
@@ -138,7 +138,7 @@ almarPairs <- dplyr::select(almarPairs,
 # Remove duplicates
 almarPairs <- dplyr::distinct(almarPairs)
 # Read in conversion file
-almarConversion <- read.table("~/Dropbox/Zoe/scf_version/make_gtf/orthofinder_sc2/homologene/marMar2.1_cdsHeader.tsv",
+almarConversion <- read.table("marMar2.1_cdsHeader.tsv",
                               header = FALSE,
                               sep = "\t")
 colnames(almarConversion) <- c("almarGene", "GCF_001458135.1_marMar2.1_protein")
@@ -154,7 +154,7 @@ almarPairs <- almarPairs[!(is.na(almarPairs$almarGene) | almarPairs$almarGene=="
 almarPairs <- plyr::ddply(almarPairs, "mikado_final_sc2_stringent_noMito_protein", summarize,
                           almarGene = paste(almarGene, collapse = ";"))
 # 19,067 woodchuck genes have almar orthologs
-write.table(almarPairs, file = "~/Dropbox/Zoe/scf_version/make_gtf/orthofinder_sc2/homologene/almarPairedOrthos.tsv",
+write.table(almarPairs, file = "almarPairedOrthos.tsv",
             quote = FALSE,
             sep = "\t",
             row.names = FALSE)
@@ -176,7 +176,7 @@ squirPairs <- dplyr::select(squirPairs,
 # Remove duplicates
 squirPairs <- dplyr::distinct(squirPairs)
 # Read in conversion file
-squirConversion <- read.table("~/Dropbox/Zoe/scf_version/make_gtf/orthofinder_sc2/homologene/SpeTri2.0_cdsHeader.tsv",
+squirConversion <- read.table("SpeTri2.0_cdsHeader.tsv",
                               header = FALSE,
                               sep = "\t")
 colnames(squirConversion) <- c("squirGene", "GCF_000236235.1_SpeTri2.0_protein")
@@ -192,13 +192,12 @@ squirPairs <- squirPairs[!(is.na(squirPairs$squirGene) | squirPairs$squirGene=="
 squirPairs <- plyr::ddply(squirPairs, "mikado_final_sc2_stringent_noMito_protein", summarize,
                           squirGene = paste(squirGene, collapse = ";"))
 # 18,973 woodchuck genes have squir orthologs
-write.table(squirPairs, file = "~/Dropbox/Zoe/scf_version/make_gtf/orthofinder_sc2/homologene/spetriPairedOrthos.tsv",
+write.table(squirPairs, file = "spetriPairedOrthos.tsv",
             quote = FALSE,
             sep = "\t",
             row.names = FALSE)
 
-# Now to combine all of this, bring in gene IDs
-setwd("~/Dropbox/Zoe/scf_version/make_gtf/orthofinder_sc2/homologene/")
+# Now to combine all of this, bring in gene IDs; list was created in the bash script
 mikado <- read.table("mikado_geneList.txt",
                      header = FALSE,
                      sep = "\t")
