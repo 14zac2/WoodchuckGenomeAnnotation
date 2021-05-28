@@ -23,7 +23,7 @@ humanPairs <- dplyr::select(humanPairs,
                             GRCh38_latest_protein)
 # Remove duplicates
 humanPairs <- dplyr::distinct(humanPairs)
-# Read in conversion file that was created in the bash script
+# Read in conversion file that was created in the script FindOrthologLabels.sh
 humanConversion <- read.table("GRCh38.p13_cdsHeader.tsv",
                               header = FALSE,
                               sep = "\t")
@@ -197,7 +197,7 @@ write.table(squirPairs, file = "spetriPairedOrthos.tsv",
             sep = "\t",
             row.names = FALSE)
 
-# Now to combine all of this, bring in gene IDs; list was created in the bash script
+# Now to combine all of this, bring in gene IDs; list was created in the script FindOrthologLabels.sh
 mikado <- read.table("mikado_geneList.txt",
                      header = FALSE,
                      sep = "\t")
