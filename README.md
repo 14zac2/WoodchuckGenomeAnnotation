@@ -22,4 +22,25 @@ This begins with the raw woodchuck genome sequence and uses annotation and trans
 ## Dependencies
 
 The following tools are used:
-- LiftOff vXX
+- LiftOff v1.5.1
+- Minimap2 v2.17-r941
+- Python v3.6.10, v3.6.11, v3.8.2
+- hisat2 v2.2.1
+- SRA-toolkit v2.10.8
+- Hisat2 v2.2.1
+- Samtools v1.12
+- Stringtie v2.1.3
+- Portcullis v1.2.0
+- Mikado v2.0rc2
+- Transdecoder v5.5.0
+- Blast+ v2.11.0
+- Gffread v0.12.1, v0.12.3
+- OrthoFinder v2.5.2
+- Diamond v2.0.4
+- Mcl v14.137
+- Fastme v2.1.6.2
+- R v4.0.4
+- Dplyr v1.0.6
+- Tidyverse v1.3.1
+
+## Data used
