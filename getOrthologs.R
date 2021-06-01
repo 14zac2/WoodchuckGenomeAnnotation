@@ -260,6 +260,11 @@ dim(humanOnes) # Kept 16,173
 mouseOnes <- mouseOnes[!(duplicated(mouseOnes$mouseGene)|duplicated(mouseOnes$mouseGene,
                                                                     fromLast = TRUE)),, drop = FALSE]
 dim(mouseOnes) # Kept 16,099
+# Remove genes with semi-colons as these are many:one orthos
+humanOnes <- humanOnes[!grepl(";", humanOnes$humanGene, fixed = TRUE),]
+dim(humanOnes) # Kept 15,846
+mouseOnes <- mouseOnes[!grepl(";", mouseOnes$mouseGene, fixed = TRUE),]
+dim(mouseOnes) # Kept 15,752
 # Rename so distinct from colnames in orthoTable
 colnames(humanOnes) <- c("mikado_final_sc2_stringent_noMito_protein", "humanOneToOne")
 colnames(mouseOnes) <- c("mikado_final_sc2_stringent_noMito_protein", "mouseOneToOne")
