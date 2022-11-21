@@ -269,9 +269,9 @@ mikado pick --json-conf mik_string_conf.yaml -db mikado.db --start-method spawn 
  # This created mikado_stringtie_sc2_permissive.gff which can be used as input for the next round of Mikado
  
 # Now use the LiftOff annotations, the filtered stringtie annotations, and the Ovaltine annotation as input for a second round of Mikado
-# conf_sc2.yaml is the new Mikado configuration file for this round of Mikado, located in the Github repo
-mikado prepare -p 48 --start-method spawn --json-conf conf_sc2.yaml
-# Creates the transcript fasta output from the various input assemblies listed in conf_sc2.yaml
+# mikado_round2_configurationFile.yaml is the new Mikado configuration file for this round of Mikado, located in the Github repo
+mikado prepare -p 48 --start-method spawn --json-conf mikado_round2_configurationFile.yaml
+# Creates the transcript fasta output from the various input assemblies listed in mikado_round2_configurationFile.yaml
 # Now run both blastx and Transdecoder, but not Portcullis because none of the inputs are raw transcript assemblies
 # This creates the same intermediate files as before (e.g. log files, mikado_prepared.fasta, etc.)
 TransDecoder.LongOrfs -t mikado_prepared.fasta -m 30
@@ -279,11 +279,11 @@ TransDecoder.Predict -t mikado_prepared.fasta --retain_long_orfs_length 30
 blastx -max_target_seqs 5 -num_threads 48 -query mikado_prepared.fasta \
  -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore ppos btop" \
  -db uniprot_sprot -evalue 0.000001 -out blast_results.tsv
-# Now use the output of these tools and the different annotation set scores (in conf_sc2.yaml) for Mikado serialise
+# Now use the output of these tools and the different annotation set scores (in mikado_round2_configurationFile.yaml) for Mikado serialise
 mikado serialise -p 48 --start-method spawn \
  --orfs mikado_prepared.fasta.transdecoder.bed \
  --transcripts mikado_prepared.fasta --tsv blast_results.tsv \
- --json-conf conf_sc2.yaml --genome_fai WCK01_AAH20201022_F8-SC2.fasta.fai \
+ --json-conf mikado_round2_configurationFile.yaml --genome_fai WCK01_AAH20201022_F8-SC2.fasta.fai \
  --log mikado_serialise.log --blast-targets uniprot_sprot.fasta --max-target-seqs 5
  # Pick the final annotation set
  # --mode is changed to stringent which means that transcripts are only split if two consecutive ORFs have both blast hits
