@@ -265,7 +265,7 @@ mikado serialise -p 48 --start-method spawn \
 # This is recommended for noisy RNA-seq data (https://mikado.readthedocs.io/en/stable/Tutorial/Adapting/)
 mikado pick --json-conf mikado_round1_configurationFile.yaml -db mikado.db --start-method spawn -p 48 \
  --loci-out mikado_stringtie_sc2_permissive.gff --log mikado_pick_stringtie_sc2_permissive.log mikado_prepared.gtf \
- --scoring mammalian_strict_rna.yaml --mode permissive
+ --scoring mikado_round1_scoringFile.yaml --mode permissive
  # This created mikado_stringtie_sc2_permissive.gff which can be used as input for the next round of Mikado
  
 # Now use the LiftOff annotations, the filtered stringtie annotations, and the Ovaltine annotation as input for a second round of Mikado
