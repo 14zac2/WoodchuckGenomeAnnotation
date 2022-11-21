@@ -288,10 +288,10 @@ mikado serialise -p 48 --start-method spawn \
  # Pick the final annotation set
  # --mode is changed to stringent which means that transcripts are only split if two consecutive ORFs have both blast hits
  # and none of those hits is against the same target.
- # scoring_ASC_3.yaml is the new scoring file to use to pick the transcripts
+ # mikado_round2_scoringFile.yaml is the new scoring file to use to pick the transcripts
  mikado pick --json-conf conf.yaml -db mikado.db --start-method spawn -p 48 --mode stringent \
  --loci-out mikado_final_sc2_stringent.gff --log mikado_final_sc2_stringent.log mikado_prepared.gtf \
- --scoring scoring_ASC_3.yaml
+ --scoring mikado_round2_scoringFile.yaml
  # This generates the final annotation
  
  # Remove any mitochondrial annotations from the final gff file, as these will be annotated separately
