@@ -203,7 +203,7 @@ portcullis full -t 1 WCK01_AAH20201022_F8-SC2.fasta alioto_sc2_merged.sorted.bam
 # -p is the number of threads
 # --start-method indicates how to begin the multiprocessing
 # --json-conf points to the configuration file
-mikado prepare -p 48 --start-method spawn --json-conf mik_string_conf.yaml
+mikado prepare -p 48 --start-method spawn --json-conf mikado_round1_configurationFile.yaml
 
 # Now BLAST+ and Transdecoder must be run on the output of mikado prepare
 # The output was a fasta file of the non-redundant transcripts
@@ -247,7 +247,7 @@ blastx -max_target_seqs 5 -num_threads 48 -query mikado_prepared.fasta \
 mikado serialise -p 48 --start-method spawn \
  --orfs mikado_prepared.fasta.transdecoder.bed \
  --transcripts mikado_prepared.fasta --tsv blast_results.tsv \
- --json-conf mik_string_conf.yaml --genome_fai WCK01_AAH20201022_F8-SC2.fasta.fai \
+ --json-conf mikado_round1_configurationFile.yaml --genome_fai WCK01_AAH20201022_F8-SC2.fasta.fai \
  --log mikado_serialise.log --blast-targets uniprot_sprot.fasta --max-target-seqs 5 \
  --junctions portcullis.pass.junctions.bed
 # The important output is the .db file. It needs to be deleted if mikado serialise fails and needs to be run again.
@@ -263,7 +263,7 @@ mikado serialise -p 48 --start-method spawn \
 # --mode indicates how transcripts should be split in the case of multiple blast hits or ORFs in a single transcript;
 # permissive presumes that transcripts with multiple ORFs are a chimeras, and splits them, unless two ORFs share a hit in the protein database
 # This is recommended for noisy RNA-seq data (https://mikado.readthedocs.io/en/stable/Tutorial/Adapting/)
-mikado pick --json-conf mik_string_conf.yaml -db mikado.db --start-method spawn -p 48 \
+mikado pick --json-conf mikado_round1_configurationFile.yaml -db mikado.db --start-method spawn -p 48 \
  --loci-out mikado_stringtie_sc2_permissive.gff --log mikado_pick_stringtie_sc2_permissive.log mikado_prepared.gtf \
  --scoring mammalian_strict_rna.yaml --mode permissive
  # This created mikado_stringtie_sc2_permissive.gff which can be used as input for the next round of Mikado
