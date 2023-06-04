@@ -1,6 +1,6 @@
 # WoodchuckGenomeAnnotation
 
-The code in the HealthyWoodchuck repository outlines the workflow for the woodchuck genome annotation project. The R and bash scripts provided are not intended to be run, but instead are guidelines of the process that contain functional code. This is to insure reproducibility of the annotation and may also be helpful for others undergoing similar projects.
+The code in the WoodchuckGenomeAnnotation repository outlines the workflow for the woodchuck genome annotation project. The R and bash scripts provided are not intended to be run, but instead are guidelines of the process that contain functional code. This is to insure reproducibility of the annotation and may also be helpful for others undergoing similar projects.
 
 ## Workflow
 
