@@ -206,7 +206,7 @@ portcullis full -t 1 WCK01_AAH20201022_F8-SC2.fasta alioto_sc2_merged.sorted.bam
 mikado prepare -p 48 --start-method spawn --json-conf mikado_round1_configurationFile.yaml
 
 # Now BLAST+ and Transdecoder must be run on the output of mikado prepare
-# The output was a fasta file of the non-redundant transcripts
+# The output was a fasta file and GTF file of the non-redundant transcripts
 
 # Using Transdecoder v5.5.0; identifies likely coding sequences based on open reading frames (ORFs)
 # -t is the transcript fasta file
