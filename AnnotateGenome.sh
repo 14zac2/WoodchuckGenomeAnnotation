@@ -212,7 +212,7 @@ mikado prepare -p 48 --start-method spawn --json-conf mikado_round1_configuratio
 # -t is the transcript fasta file
 # -m is the minimum protein length of 30 amino acids
 TransDecoder.LongOrfs -t mikado_prepared.fasta -m 30
-# --retain_long_orfs_length retains ORFs equal to or longer than 30 nucleotides
+# --retain_long_orfs_length retains ORFs equal to or longer than 30 amino acids
 TransDecoder.Predict -t mikado_prepared.fasta --retain_long_orfs_length 30
 # Outputs valid ORFs in a bed file, in this case: mikado_prepared.fasta.transdecoder.bed
 
